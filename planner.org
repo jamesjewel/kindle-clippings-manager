@@ -1,0 +1,34 @@
+#+TITLE: Kindle Clippings Manager
+#+DESCRIPTION: A program to organize your Kindle notes and highlights
+
+#+NAME: Features
+* Features
+- Uses 'My Clippings.txt'
+- Organizes into folders for books
+
+* TODO [0%]
+- [ ] Find a good name
+- [ ] Look for page range
+
+* Rough Patch
+** 'My Clippings.txt' format:
+#+BEGIN_SRC
+BOOK_NAME (AUTHOR_NAME)
+- Your [CLIPPING_TYPE] on page PAGE | location [LOC_X/LOC_X-LOC_Y] | Added
+on TIMESTAMP
+
+CLIPPING_TEXT
+==========
+#+END_SRC
+*** Variables:
+| NAME          | DESCRIPTION                             | TYPE    | VALUES           |
+|---------------+-----------------------------------------+---------+------------------|
+| BOOK_NAME     | Name of the book                        | String  | -                |
+| AUTHOR_NAME   | Name of the author                      | String  | -                |
+| CLIPPING_TYPE | Clipping is a note, highlight, bookmark | Integer | 0,1,2            |
+| PAGE          | Page number of clipping                 | Integer | rangeof(Integer) |
+| LOCATION      | Location of a clipping                  | Integer | rangeof(Integer) |
+| TIMESTAMP     | The timestamp                           | String  | -                |
+**** Notes:
+TIMESTAMP is a ~String~ of format "Friday, 28 February 2020 10:30:30" i.e.
+"DAY_OF_WEEK, DAY MONTH YEAR HH:MM:SS"
