@@ -28,7 +28,7 @@ for index, line in enumerate(lines):
 #   print("{}: {}".format(index, line))
     if line.rstrip() == CLIPPING_END_STRING:
         stopLine = index
-        break
-
-for i in range(startLine, stopLine):
-   print(lines[i], end='')
+        for i in range(startLine, stopLine):
+            print(lines[i], end='')
+        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        startLine = stopLine + 1

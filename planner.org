@@ -9,6 +9,9 @@
 * TODO [0%]
 - [ ] Find a good name
 - [ ] Look for page range
+- [X] Language decide: C/Python
+** Python project [100%]
+- [X] Separate a block
 
 * Rough Patch
 ** 'My Clippings.txt' format:
@@ -32,3 +35,7 @@ CLIPPING_TEXT
 **** Notes:
 TIMESTAMP is a ~String~ of format "Friday, 28 February 2020 10:30:30" i.e.
 "DAY_OF_WEEK, DAY MONTH YEAR HH:MM:SS"
+
+** Steps
+1) Identity blocks: ends with ==========
+2)
