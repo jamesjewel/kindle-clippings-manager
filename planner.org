@@ -12,6 +12,7 @@
 - [X] Language decide: C/Python
 ** Python project [100%]
 - [X] Separate a block
+- [ ] Create regexp patterns for the format
 
 * Rough Patch
 ** 'My Clippings.txt' format:
