@@ -10,7 +10,7 @@
 - [ ] Find a good name
 - [ ] Look for page range
 - [X] Language decide: C/Python
-** Python project [100%]
+** Python project
 - [X] Separate a block
 - [ ] Create regexp patterns for the format
 
