@@ -5,6 +5,9 @@
 * Features
 - Uses 'My Clippings.txt'
 - Organizes into folders for books
+- Output formats
+- Change time format
+- Simplified text output
 
 * TODO [0%]
 - [ ] Find a good name
@@ -12,7 +15,9 @@
 - [X] Language decide: C/Python
 ** Python project
 - [X] Separate a block
-- [ ] Create regexp patterns for the format
+- [X] Create regexp patterns for the format
+- [ ] Create the object oriented model
+- [ ] Change month of day regexp pattern
 
 * Rough Patch
 ** 'My Clippings.txt' format:
