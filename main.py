@@ -13,7 +13,7 @@ CLIPPING_END_STRING = "=========="
 fileDir = "./" # End with a /
 lines = []
 
-# Open the file, read the data as a string
+# Open the file, read the data line by line into a list
 file = open(fileDir + FILENAME, "r")
 lines = file.readlines()
 file.close()
@@ -38,8 +38,9 @@ def parseBlock(startLine, stopLine):
 
    line2 = lines[startLine+1].strip()
    book['posInfo'] = line2
-   pattern = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) (\d+)(-?)(\d*) \|? (location (\d+)(-?)(\d*)){0,1}")
+   pattern = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) (\d+)(-?)(\d*) \|? (location (\d+)(-?)(\d*))? ?\|? ?Added on ([a-zA-Z]{3,6}day), (\d{1,2}) ([a-zA-Z]+) (\d{4}) (\d\d):(\d\d):(\d\d)")
    result = pattern.match(line2)
+   # \| Added on (\s{3,6}day), (\d{1,2}) (\d{4}) (\d\d):(\d\d):(\d\d)")
    if result != None:
        print(result.groups())
    # line 3: highlight
