@@ -1,0 +1,6 @@
+#+TITLE: Kindle Clippings Organizer
+#+DESCRIPTION: The project README
+
+* Kindle Clippings Organizer
+This is a tool that can organize your Kindle notes and highlights ('My
+Clippings.txt') into folders based on their book titles.
