@@ -5,6 +5,8 @@
 * Features
 - Uses 'My Clippings.txt'
 - Organizes into folders for books
+- Output formats
+- Change time format
 
 * TODO [0%]
 - [ ] Find a good name
