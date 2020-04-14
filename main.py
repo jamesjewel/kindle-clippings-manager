@@ -25,30 +25,27 @@ stopLine = 0
 
 count = 0
 
+# Parses a block of clipping to get information
 def parseBlock(startLine, stopLine):
-   # line 1: BOOK_NAME (AUTHOR_NAME)
-   line2 = lines[startLine].strip()
+   # line 1: Book info
+   curLine = lines[startLine].strip()
    pattern = re.compile(r"([\s\S]+)\(([\s\S]+)\)")
-   result = pattern.match(line2)
+   result = pattern.match(curLine)
    book = {}
    if result != None:
        book['name'] = result.group(1).strip()
        book['author'] = result.group(2).strip()
-#      print(result.group(1), result.group(2), sep='\t')
-
-   line2 = lines[startLine+1].strip()
-   book['posInfo'] = line2
-   pattern = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) (\d+)(-?)(\d*) \|? (location (\d+)(-?)(\d*))? ?\|? ?Added on ([a-zA-Z]{3,6}day), (\d{1,2}) ([a-zA-Z]+) (\d{4}) (\d\d):(\d\d):(\d\d)")
-   result = pattern.match(line2)
-   # \| Added on (\s{3,6}day), (\d{1,2}) (\d{4}) (\d\d):(\d\d):(\d\d)")
+   # line 2: Metadata
+   curLine = lines[startLine+1].strip()
+   pattern = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) (\d+)(-?)(\d*)( \| location (\d+)(-?)(\d*))? \| Added on ([a-zA-Z]{3,6}day), (\d{1,2}) ([a-zA-Z]+) (\d{4}) (\d\d):(\d\d):(\d\d)")
+   result = pattern.match(curLine)
    if result != None:
        print(result.groups())
-   # line 3: highlight
-   line2 = lines[startLine + 3].strip()
-   book['highlight'] = line2
+   # line 3: Highlight
+   curLine = lines[startLine + 3].strip()
+   book['highlight'] = curLine
 
-#  print(book)
-
+# The main program begins here:
 for index, line in enumerate(lines):
 #   print("{}: {}".format(index, line))
     if line.rstrip() == CLIPPING_END_STRING:
