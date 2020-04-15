@@ -18,6 +18,8 @@
 - [X] Create regexp patterns for the format
 - [ ] Create the object oriented model
 - [ ] Change month of day regexp pattern
+- [ ] Error handling
+  - [ ] Evaluate the case where there is only one highlight
 
 * Rough Patch
 ** 'My Clippings.txt' format:
