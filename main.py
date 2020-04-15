@@ -21,7 +21,7 @@ class Clip:
         self.author = _author
         self.text = _text
         self.ctype = _type
-        self.time = _time
+        self.ctime = _time
         self.loc = {}
         self.page = {}
         self.loc['x'] = _loc[0]
@@ -29,6 +29,17 @@ class Clip:
         self.page['x'] = _page[0]
         self.page['y'] = _page[1]
 
+    def getClip(self):
+        clipDict = {}
+        clipDict['title'] = self.title
+        clipDict['author'] = self.author
+        clipDict['text'] = self.text
+        clipDict['type'] = self.ctype
+        clipDict['location'] = self.loc
+        clipDict['page'] = self.page
+        clipDict['time'] = time.asctime(self.ctime)
+        return clipDict
+   
     def printClip(self):
         print("Title:", self.title)
         print("Author:", self.author)
@@ -87,7 +98,7 @@ def parseBlock(startLine, stopLine):
     curLine = lines[startLine + 3].strip()
     text = curLine
     clipObj = Clip(title, author, text, ctype, timeObj, loc, page)
-    return clipObj.__dict__
+    return clipObj
 
 # The main program begins here:
 # Open the file, read the data line by line into a list
@@ -107,11 +118,11 @@ for index, line in enumerate(lines):
         count = count + 1
 #       print(count)
         stopLine = index
-        clipList.append(parseBlock(startLine, stopLine))
+        clipList.append(parseBlock(startLine, stopLine).getClip())
         startLine = stopLine + 1
 
 print(clipList)
-jsonString = json.dumps(clipList, indent=4, sort_keys=False)
+jsonString = json.dumps(clipList, indent=3, sort_keys=False)
 
 file = open(fileDir + "My Clippings.json", "w")
 file.write(jsonString)
