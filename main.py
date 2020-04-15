@@ -3,6 +3,7 @@
 # Imports
 import re
 import time
+import json
 
 ## CONFIGURATION
 ## Change these variables to configure the program
@@ -15,7 +16,7 @@ fileDir = "./" # End with a /
 # Class definitions
 class Clip:
     """The clipping class definition"""
-    def __init__(self, _title, _author, _text, _type, _time, _loc, _page):
+    def __init__(self, _title, _author, _text, _type, _time, _loc=[-1, -1], _page=[-1, -1]):
         self.title = _title
         self.author = _author
         self.text = _text
@@ -86,8 +87,7 @@ def parseBlock(startLine, stopLine):
     curLine = lines[startLine + 3].strip()
     text = curLine
     clipObj = Clip(title, author, text, ctype, timeObj, loc, page)
-    clipObj.printClip()
-    return clipObj
+    return clipObj.__dict__
 
 # The main program begins here:
 # Open the file, read the data line by line into a list
@@ -99,13 +99,20 @@ curLine = 0
 startLine = 0
 stopLine = 0
 count = 0
-  
+
+clipList = []
 for index, line in enumerate(lines):
 #   print("{}: {}".format(index, line))
     if line.rstrip() == CLIPPING_END_STRING:
         count = count + 1
 #       print(count)
         stopLine = index
-        parseBlock(startLine, stopLine)
+        clipList.append(parseBlock(startLine, stopLine))
         startLine = stopLine + 1
 
+print(clipList)
+jsonString = json.dumps(clipList, indent=4, sort_keys=False)
+
+file = open(fileDir + "My Clippings.json", "w")
+file.write(jsonString)
+file.close()
