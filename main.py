@@ -2,7 +2,7 @@
 
 # Imports
 import re
-import json
+import time
 
 ## CONFIGURATION
 ## Change these variables to configure the program
@@ -37,6 +37,7 @@ class Clip:
         print("Title:", self.title)
         print("Author:", self.author)
         print("Text:", self.text)
+        print("Time:", time.asctime(self.time))
 
 
 # Parses a block of clipping to get information
@@ -58,20 +59,23 @@ def parseBlock(startLine, stopLine):
    res = p.match(curLine)
    # extracting timestamp
    # strptime('Fri Mar 01 23:38:40 2019')
-   timestring = '{weekday} {month} {day} {hour}:{minute}:{second} {year}'
-   timestring = timestring.format(weekday=res.group(11), month=res.group(13), \
+   timeString = '{weekday} {month} {day} {hour}:{minute}:{second} {year}'
+   timeString = timeString.format(weekday=res.group(11), month=res.group(13), \
                                   day=res.group(12), \
                                   hour=res.group(15), minute=res.group(16), \
                                   second=res.group(17), \
                                   year=res.group(14))
-   print(timestring)
+#  print(timeString)
+   # creating the time object
+   timeObj = time.strptime(timeString)
+   clipObj.time = timeObj
    #if res != None:
     #   print(res.groups())
    # line 3: Highlight
    curLine = lines[startLine + 3].strip()
    clipObj.text = curLine
 #  print(clipObj)
-#  clipObj.printClip()
+   clipObj.printClip()
 # The main program begins here:
 for index, line in enumerate(lines):
 #   print("{}: {}".format(index, line))
