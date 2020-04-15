@@ -26,15 +26,13 @@ stopLine = 0
 count = 0
 
 class Clip:
-    title = ""
-    author = ""
-    text = ""
-    timestamp = ""
-    class pos:
-        startPage = 0
-        endPage = 0
-        startLoc = 0
-        endLoc = 0
+class Clip:
+    """The clipping class definitio n"""
+    def __init__(self, _title, _author, _text, _time):
+        self.title = _title
+        self.author = _author
+        self.text = _text
+        self.time = _time
 
     def printClip(self):
         print("Title:", self.title)
@@ -42,7 +40,6 @@ class Clip:
         print("Text:", self.text)
 
 
-    
 # Parses a block of clipping to get information
 def parseBlock(startLine, stopLine):
    # line 1: Book info
