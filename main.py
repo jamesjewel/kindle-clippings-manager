@@ -27,16 +27,18 @@ count = 0
 
 class Clip:
     """The clipping class definitio n"""
-    def __init__(self, _title, _author, _text, _time):
+    def __init__(self, _title, _author, _text, _type, _time):
         self.title = _title
         self.author = _author
         self.text = _text
+        self.ctype = _type
         self.time = _time
 
     def printClip(self):
         print("Title:", self.title)
         print("Author:", self.author)
         print("Text:", self.text)
+        print("Type:", self.ctype)
         print("Time:", time.asctime(self.time))
 
 
@@ -46,7 +48,7 @@ def parseBlock(startLine, stopLine):
    curLine = lines[startLine].strip()
    p = re.compile(r"([\s\S]+)\(([\s\S]+)\)")
    res = p.match(curLine)
-   clipObj = Clip("","","","")
+   clipObj = Clip("","","","","")
    if res != None:
        clipObj.title = res.group(1).strip()
        clipObj.author = res.group(2).strip()
@@ -57,6 +59,8 @@ def parseBlock(startLine, stopLine):
                    "Added on ([a-zA-Z]{3})[a-zA-Z]{,3}day, (\d{1,2}) " \
                    "([a-zA-Z]{3})[a-zA-Z]+ (\d{4}) (\d\d):(\d\d):(\d\d)")
    res = p.match(curLine)
+   # getting clipping type
+   clipObj.ctype = res.group(1)
    # extracting timestamp
    # strptime('Fri Mar 01 23:38:40 2019')
    timeString = '{weekday} {month} {day} {hour}:{minute}:{second} {year}'
