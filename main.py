@@ -11,20 +11,8 @@ CLIPPING_END_STRING = "=========="
 
 # Global Variables
 fileDir = "./" # End with a /
-lines = []
 
-# Open the file, read the data line by line into a list
-file = open(fileDir + FILENAME, "r")
-lines = file.readlines()
-file.close()
-
-# Parsing text
-curLine = 0
-startLine = 0
-stopLine = 0
-
-count = 0
-
+# Class definitions
 class Clip:
     """The clipping class definition"""
     def __init__(self, _title, _author, _text, _type, _time, _loc, _page):
@@ -44,7 +32,6 @@ class Clip:
         print("Location:", self.loc)
         print("Page:", self.page)
         print("Time:", time.asctime(self.time))
-
 
 # Parses a block of clipping to get information
 def parseBlock(startLine, stopLine):
@@ -97,8 +84,18 @@ def parseBlock(startLine, stopLine):
     clipObj = Clip(title, author, text, ctype, timeObj, loc, page)
     clipObj.printClip()
     return clipObj
-   
+
 # The main program begins here:
+# Open the file, read the data line by line into a list
+file = open(fileDir + FILENAME, "r")
+lines = file.readlines()
+file.close()
+
+curLine = 0
+startLine = 0
+stopLine = 0
+count = 0
+  
 for index, line in enumerate(lines):
 #   print("{}: {}".format(index, line))
     if line.rstrip() == CLIPPING_END_STRING:
