@@ -2,7 +2,7 @@
 
 # Imports
 import re
-import json
+import time
 
 ## CONFIGURATION
 ## Change these variables to configure the program
@@ -26,50 +26,84 @@ stopLine = 0
 count = 0
 
 class Clip:
-    title = ""
-    author = ""
-    text = ""
-    timestamp = ""
-    class pos:
-        startPage = 0
-        endPage = 0
-        startLoc = 0
-        endLoc = 0
+    """The clipping class definition"""
+    def __init__(self, _title, _author, _text, _type, _time, _loc, _page):
+        self.title = _title
+        self.author = _author
+        self.text = _text
+        self.ctype = _type
+        self.time = _time
+        self.loc = _loc
+        self.page = _page
 
     def printClip(self):
         print("Title:", self.title)
         print("Author:", self.author)
         print("Text:", self.text)
+        print("Type:", self.ctype)
+        print("Location:", self.loc)
+        print("Page:", self.page)
+        print("Time:", time.asctime(self.time))
 
 
-    
 # Parses a block of clipping to get information
 def parseBlock(startLine, stopLine):
    # line 1: Book info
-   curLine = lines[startLine].strip()
-   pattern = re.compile(r"([\s\S]+)\(([\s\S]+)\)")
-   result = pattern.match(curLine)
-   clipObj = Clip()
-   if result != None:
-       clipObj.title = result.group(1).strip()
-       clipObj.author = result.group(2).strip()
-   # line 2: Metadata
-   curLine = lines[startLine+1].strip()
-   pattern = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) (\d+)(-?)(\d*)( \| location (\d+)(-?)(\d*))? \| Added on ([a-zA-Z]{3,6}day), (\d{1,2}) ([a-zA-Z]+) (\d{4}) (\d\d):(\d\d):(\d\d)")
-   result = pattern.match(curLine)
-#  if result != None:
-       #print(result.groups())
-   # line 3: Highlight
-   curLine = lines[startLine + 3].strip()
-   clipObj.text = curLine
-#  print(clipObj)
-   clipObj.printClip()
+    curLine = lines[startLine].strip()
+    p = re.compile(r"([\s\S]+)\(([\s\S]+)\)")
+    res = p.match(curLine)
+    if res != None:
+        title = res.group(1)
+        author = res.group(2)
+
+    # line 2: Metadata
+    curLine = lines[startLine+1].strip()
+    p = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) " \
+                    "(\d+)(-?(\d+))?( \| location (\d+)(-?(\d+))?)? \| " \
+                    "Added on ([a-zA-Z]{3})[a-zA-Z]{,3}day, (\d{1,2}) " \
+                    "([a-zA-Z]{3})[a-zA-Z]+ (\d{4}) (\d\d):(\d\d):(\d\d)")
+    res = p.match(curLine)
+    # getting clipping type
+    ctype = res.group(1)
+    # getting position data
+    # integer conversion
+    temp = []
+    for i in [4, 6, 8, 10]:
+        if res.group(i) is not None:
+            temp.append(int(res.group(i)))
+        else:
+            temp.append(-1)
+    if res.group(3) == 'location':
+        loc = [temp[0], temp[1]]
+        page = [-1, -1]
+    elif res.group(3) == 'page':
+        page = [temp[0], temp[1]]
+        loc = [temp[2], temp[3]]
+    # extracting timestamp
+    # strptime('Fri Mar 01 23:38:40 2019')
+    timeString = '{weekday} {month} {day} {hour}:{minute}:{second} {year}'
+    timeString = timeString.format(weekday=res.group(11), month=res.group(13), \
+                                   day=res.group(12), \
+                                   hour=res.group(15), minute=res.group(16), \
+                                   second=res.group(17), \
+                                   year=res.group(14))
+    # creating the time object
+    timeObj = time.strptime(timeString)
+    if res != None:
+        print(res.groups())
+    # line 3: Highlight
+    curLine = lines[startLine + 3].strip()
+    text = curLine
+    clipObj = Clip(title, author, text, ctype, timeObj, loc, page)
+    clipObj.printClip()
+    return clipObj
+   
 # The main program begins here:
 for index, line in enumerate(lines):
 #   print("{}: {}".format(index, line))
     if line.rstrip() == CLIPPING_END_STRING:
         count = count + 1
-        print(count)
+#       print(count)
         stopLine = index
         parseBlock(startLine, stopLine)
         startLine = stopLine + 1
