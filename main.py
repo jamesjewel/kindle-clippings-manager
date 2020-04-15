@@ -51,15 +51,22 @@ def parseBlock(startLine, stopLine):
        clipObj.author = res.group(2).strip()
    # line 2: Metadata
    curLine = lines[startLine+1].strip()
-   p = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) (\d+)(-?)(\d*)( \| location (\d+)(-?)(\d*))? \| Added on ([a-zA-Z]{3})[a-zA-Z]{,3}day, (\d{1,2}) ([a-zA-Z]{3})[a-zA-Z]+ (\d{4}) (\d\d):(\d\d):(\d\d)")
+   p = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) " \
+                   "(\d+)(-?)(\d*)( \| location (\d+)(-?)(\d*))? \| " \
+                   "Added on ([a-zA-Z]{3})[a-zA-Z]{,3}day, (\d{1,2}) " \
+                   "([a-zA-Z]{3})[a-zA-Z]+ (\d{4}) (\d\d):(\d\d):(\d\d)")
    res = p.match(curLine)
    # extracting timestamp
    # strptime('Fri Mar 01 23:38:40 2019')
-   timestring = '{weekday} {month} {day}'
-   timestring = timestring.format(weekday=res.group(11), month=res.group(13), day=res.group(12))
+   timestring = '{weekday} {month} {day} {hour}:{minute}:{second} {year}'
+   timestring = timestring.format(weekday=res.group(11), month=res.group(13), \
+                                  day=res.group(12), \
+                                  hour=res.group(15), minute=res.group(16), \
+                                  second=res.group(17), \
+                                  year=res.group(14))
    print(timestring)
-#  if res != None:
-#     print(res.groups())
+   #if res != None:
+    #   print(res.groups())
    # line 3: Highlight
    curLine = lines[startLine + 3].strip()
    clipObj.text = curLine
