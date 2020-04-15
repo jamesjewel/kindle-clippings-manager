@@ -21,8 +21,12 @@ class Clip:
         self.text = _text
         self.ctype = _type
         self.time = _time
-        self.loc = _loc
-        self.page = _page
+        self.loc = {}
+        self.page = {}
+        self.loc['x'] = _loc[0]
+        self.loc['y'] = _loc[1]
+        self.page['x'] = _page[0]
+        self.page['y'] = _page[1]
 
     def printClip(self):
         print("Title:", self.title)
@@ -76,8 +80,8 @@ def parseBlock(startLine, stopLine):
                                    year=res.group(14))
     # creating the time object
     timeObj = time.strptime(timeString)
-    if res != None:
-        print(res.groups())
+#   if res != None:
+#       print(res.groups())
     # line 3: Highlight
     curLine = lines[startLine + 3].strip()
     text = curLine
