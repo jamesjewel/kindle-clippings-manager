@@ -52,12 +52,11 @@ class Clip:
 # Parses a block of clipping to get information
 def parseBlock(startLine, stopLine):
    # line 1: Book info
-    curLine = lines[startLine].strip()
-    p = re.compile(r"([\s\S]+) \(([\s\S]+)\)")
+    curLine = lines[startLine].lstrip('\ufeff').rstrip('\n')
+    p = re.compile(r'([\S ]+) \(([\S ]+)\)')
     res = p.match(curLine)
-    if res != None:
-        title = res.group(1)
-        author = res.group(2)
+    title = res.group(1)
+    author = res.group(2)
 
     # line 2: Metadata
     curLine = lines[startLine+1].strip()
@@ -101,8 +100,15 @@ def parseBlock(startLine, stopLine):
 
 # The main program begins here:
 # Open the file, read the data line by line into a list
-file = open(fileDir + FILENAME, "r")
+try:
+    file = open(fileDir + FILENAME, "r", encoding = 'utf-8')
+except FileNotFoundError:
+    print("Error: The file", fileDir + FILENAME, "does not exist.")
+    exit(1)
 lines = file.readlines()
+if len(lines) == 0:
+    print("Error: The file", fileDir + FILENAME, "is empty.")
+    exit(1)
 file.close()
 
 curLine = 0
