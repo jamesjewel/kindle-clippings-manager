@@ -10,16 +10,26 @@
 - Simplified text output
 
 * TODO [0%]
-- [ ] Find a good name
+- [X] Find a good name - _clipman_
 - [ ] Look for page range
 - [X] Language decide: C/Python
-** Python project
+** Python project [0%]
 - [X] Separate a block
 - [X] Create regexp patterns for the format
-- [ ] Create the object oriented model
+- [X] Create the object oriented model
 - [ ] Change month of day regexp pattern
+- [ ] Change the book info regex
+- [-] Generate clipping hash and save
 - [ ] Error handling
   - [ ] Evaluate the case where there is only one highlight
+- [ ] Notes library:
+  - [ ] Create directories
+- [ ] Command line arguments
+- [ ] Configuration file
+*** Bugs
+- [X] The extra space at the end of title
+- [ ] Formatting characters at the beginning of title
+- [ ] Fixing unicode issues
 
 * Rough Patch
 ** 'My Clippings.txt' format:
@@ -44,6 +54,14 @@ CLIPPING_TEXT
 TIMESTAMP is a ~String~ of format "Friday, 28 February 2020 10:30:30" i.e.
 "DAY_OF_WEEK, DAY MONTH YEAR HH:MM:SS"
 
-** Steps
-1) Identity blocks: ends with ==========
-2)
+** Program manual:
+~clipman --file /path/to/My\ Clippings.txt --dest-dir~
+_ARGUMENTS_:
+If file and destdir are not provided, the current directory will be looked for.
+
+**** ERRORS
+1) The file /path/to/My\ Clippings.txt does not exist.
+2) Unable to parse /path/to/My\ Clippings.txt
+   It might not be a Kindle clippings file.
+3) Couldn't find an existing library in the given directory (/path/to/dir)
+   Do you want to create a new library here? (y/N)
