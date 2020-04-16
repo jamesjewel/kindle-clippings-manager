@@ -53,7 +53,7 @@ class Clip:
 def parseBlock(startLine, stopLine):
    # line 1: Book info
     curLine = lines[startLine].strip()
-    p = re.compile(r"([\s\S]+)\(([\s\S]+)\)")
+    p = re.compile(r"([\s\S]+) \(([\s\S]+)\)")
     res = p.match(curLine)
     if res != None:
         title = res.group(1)
@@ -67,9 +67,8 @@ def parseBlock(startLine, stopLine):
                     "([a-zA-Z]{3})[a-zA-Z]+ (\d{4}) (\d\d):(\d\d):(\d\d)")
     res = p.match(curLine)
     # getting clipping type
-    ctype = res.group(1)
+    ctype = res.group(1).lower()
     # getting position data
-    # integer conversion
     temp = []
     for i in [4, 6, 8, 10]:
         if res.group(i) is not None:
@@ -121,7 +120,6 @@ for index, line in enumerate(lines):
         clipList.append(parseBlock(startLine, stopLine).getClip())
         startLine = stopLine + 1
 
-print(clipList)
 jsonString = json.dumps(clipList, indent=3, sort_keys=False)
 
 file = open(fileDir + "My Clippings.json", "w")
