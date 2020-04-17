@@ -14,6 +14,7 @@ CLIPPING_END_STRING = "=========="
 fileDir = "./" # End with a /
 
 # Class definitions
+# Test this
 class Clip:
     """The clipping class definition"""
     def __init__(self, _title, _author, _text, _type, _time, _loc=[-1, -1], _page=[-1, -1]):
