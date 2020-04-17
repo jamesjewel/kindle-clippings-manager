@@ -3,12 +3,14 @@
 # Imports
 import re
 import time
+import os
 import json
 
 ## CONFIGURATION
 ## Change these variables to configure the program
 FILENAME = "My Clippings.txt"
 CLIPPING_END_STRING = "=========="
+LIBRARYDIR = "./clippings-library"
 
 # Global Variables
 fileDir = "./" # End with a /
@@ -125,6 +127,29 @@ for index, line in enumerate(lines):
         stopLine = index
         clipList.append(parseBlock(startLine, stopLine).getClip())
         startLine = stopLine + 1
+
+if len(clipList) == 0:
+    print("No clips found in the file. Nothing to do.")
+
+# derive the exitsting booklist from folders.
+# check if library exists
+if not os.path.exists(LIBRARYDIR):
+    print("Error: The library location does not exist ({})".format(LIBRARYDIR));
+    choice = input("Create new library here? [y/N] ")
+    if choice.lower() == 'y':
+        os.mkdir(LIBRARYDIR)
+
+bookList = []
+for clip in clipList:
+    if clip['title'] not in bookList:
+        bookList.append(clip['title'])
+        # if new book check path exists
+        if not os.path.exists(LIBRARYDIR + clip['title']):
+            os.mkdir('{libdir}/{subdir}'.format(libdir=LIBRARYDIR, subdir=clip['title']))
+    # iterate through clips add them to clipping file
+    with open('{libdir}/{subdir}/{filename}.txt'.format(libdir=LIBRARYDIR, subdir=clip['title'], filename='{} - {}'.format(clip['author'], clip['title'])), 'a+') as file:
+        file.write(clip['text'] + '\n\n')
+
 
 jsonString = json.dumps(clipList, indent=3, sort_keys=False)
 
