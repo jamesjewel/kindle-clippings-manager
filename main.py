@@ -14,7 +14,6 @@ CLIPPING_END_STRING = "=========="
 fileDir = "./" # End with a /
 
 # Class definitions
-# Test this
 class Clip:
     """The clipping class definition"""
     def __init__(self, _title, _author, _text, _type, _time, _loc=[-1, -1], _page=[-1, -1]):
@@ -126,6 +125,16 @@ for index, line in enumerate(lines):
         stopLine = index
         clipList.append(parseBlock(startLine, stopLine).getClip())
         startLine = stopLine + 1
+
+if len(clipList) == 0:
+    print("No clips found in the file. Nothing to do.")
+
+bookList = []
+for clip in clipList:
+    if clip['title'] not in bookList:
+        bookList.append(clip['title'])
+for book in bookList:
+    print(book)
 
 jsonString = json.dumps(clipList, indent=3, sort_keys=False)
 
