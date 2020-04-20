@@ -39,7 +39,7 @@ class Clip:
         clipDict['type'] = self.ctype
         clipDict['location'] = self.loc
         clipDict['page'] = self.page
-        clipDict['time'] = time.asctime(self.ctime)
+        clipDict['time'] = self.ctime
         return clipDict
    
     def printClip(self):
@@ -97,7 +97,7 @@ def parseBlock(startLine, stopLine):
     # line 3: Highlight
     curLine = lines[startLine + 3].strip()
     text = curLine
-    clipObj = Clip(title, author, text, ctype, timeObj, loc, page)
+    clipObj = Clip(title, author, text, ctype, time.asctime(timeObj), loc, page)
     return clipObj
 
 # The main program begins here:
@@ -119,37 +119,51 @@ stopLine = 0
 count = 0
 
 clipList = []
+clipObjList = []
 for index, line in enumerate(lines):
-#   print("{}: {}".format(index, line))
     if line.rstrip() == CLIPPING_END_STRING:
         count = count + 1
-#       print(count)
         stopLine = index
-        clipList.append(parseBlock(startLine, stopLine).getClip())
+        clipObj = parseBlock(startLine, stopLine)
+        clipList.append(clipObj.getClip())
+        clipObjList.append(clipObj)
         startLine = stopLine + 1
 
 if len(clipList) == 0:
     print("No clips found in the file. Nothing to do.")
 
 # derive the exitsting booklist from folders.
+firstRunFlag = False
 # check if library exists
 if not os.path.exists(LIBRARYDIR):
-    print("Error: The library location does not exist ({})".format(LIBRARYDIR));
+    print("The library location does not exist ({})".format(LIBRARYDIR));
     choice = input("Create new library here? [y/N] ")
     if choice.lower() == 'y':
+        firstRunFlag = True
         os.mkdir(LIBRARYDIR)
-
+# pre-process: get info about the current library
+# req: the current library be written
 bookList = []
-for clip in clipList:
-    if clip['title'] not in bookList:
-        bookList.append(clip['title'])
+count = 0
+for clip in clipObjList:
+    count += 1
+    if clip.title not in bookList:
+        bookList.append(clip.title)
         # if new book check path exists
-        if not os.path.exists(LIBRARYDIR + clip['title']):
-            os.mkdir('{libdir}/{subdir}'.format(libdir=LIBRARYDIR, subdir=clip['title']))
+        if not os.path.exists(LIBRARYDIR + clip.title):
+            os.mkdir('{libdir}/{subdir}'.format(libdir=LIBRARYDIR, subdir=clip.title))
     # iterate through clips add them to clipping file
-    with open('{libdir}/{subdir}/{filename}.txt'.format(libdir=LIBRARYDIR, subdir=clip['title'], filename='{} - {}'.format(clip['author'], clip['title'])), 'a+') as file:
-        file.write(clip['text'] + '\n\n')
-
+    with open('{libdir}/{subdir}/{filename}.txt'.format(libdir=LIBRARYDIR, subdir=clip.title, filename='{} - {}'.format(clip.author, clip.title)), 'a+') as file:
+        writeString = '"' + clip.text + '"\n\n'
+        writeString += '(#{no}, Page {pagex}{sep}{pagey}' \
+            ', Location {locx}{sep}{locy}' \
+            ', Added at {timestamp})' \
+            '\n-----------\n\n' \
+            .format(no=count, pagex=clip.page['x'], \
+                    sep='-', pagey=clip.page['y'], \
+                    locx=clip.loc['x'], locy=clip.loc['y'], \
+                    timestamp=clip.ctime)
+        file.write(writeString)
 
 jsonString = json.dumps(clipList, indent=3, sort_keys=False)
 
