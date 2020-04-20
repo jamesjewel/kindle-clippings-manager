@@ -154,16 +154,23 @@ for clip in clipObjList:
             os.mkdir('{libdir}/{subdir}'.format(libdir=LIBRARYDIR, subdir=clip.title))
     # iterate through clips add them to clipping file
     with open('{libdir}/{subdir}/{filename}.txt'.format(libdir=LIBRARYDIR, subdir=clip.title, filename='{} - {}'.format(clip.author, clip.title)), 'a+') as file:
-        writeString = '"' + clip.text + '"\n\n'
-        writeString += '(#{no}, Page {pagex}{sep}{pagey}' \
-            ', Location {locx}{sep}{locy}' \
-            ', Added at {timestamp})' \
-            '\n-----------\n\n' \
-            .format(no=count, pagex=clip.page['x'], \
-                    sep='-', pagey=clip.page['y'], \
-                    locx=clip.loc['x'], locy=clip.loc['y'], \
-                    timestamp=clip.ctime)
-        file.write(writeString)
+        metastring = '"' + clip.text + '"\n\n'
+        metastring += '(#{no}, '.format(no=count)
+        if clip.page['x'] >= 0:
+            metastring += 'Page {pagex}'.format(pagex=clip.page['x'])
+            if clip.page['y'] >= 0:
+                metastring += '{sep}{pagey}, '.format(sep='-', pagey=clip.page['y'])
+            else:
+                metastring += ', '
+        if clip.loc['x'] >= 0:
+            metastring += 'Loc {locx}'.format(locx=clip.loc['x'])
+            if clip.loc['y'] >= 0:
+                metastring += '{sep}{locy}, '.format(sep='-', locy=clip.loc['y'])
+            else:
+                metastring += ', '
+        metastring += 'Added at {timestamp})'.format(timestamp=clip.ctime)
+        metastring += '\n-----------\n\n'
+        file.write(metastring)
 
 jsonString = json.dumps(clipList, indent=3, sort_keys=False)
 
