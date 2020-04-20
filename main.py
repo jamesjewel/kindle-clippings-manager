@@ -150,27 +150,30 @@ for clip in clipObjList:
     if clip.title not in bookList:
         bookList.append(clip.title)
         # if new book check path exists
-        if not os.path.exists(LIBRARYDIR + clip.title):
-            os.mkdir('{libdir}/{subdir}'.format(libdir=LIBRARYDIR, subdir=clip.title))
+#       if not os.path.exists(LIBRARYDIR + clip.title):
+#           os.mkdir('{libdir}/{subdir}'.format(libdir=LIBRARYDIR, subdir=clip.title))
     # iterate through clips add them to clipping file
-    with open('{libdir}/{subdir}/{filename}.txt'.format(libdir=LIBRARYDIR, subdir=clip.title, filename='{} - {}'.format(clip.author, clip.title)), 'a+') as file:
-        metastring = '"' + clip.text + '"\n\n'
-        metastring += '(#{no}, '.format(no=count)
+    with open('{libdir}/{filename}.txt' \
+              .format(libdir=LIBRARYDIR, \
+                      filename='{} - {}'.format(clip.author, clip.title)) \
+              , 'a') as file:
+        clipstring = '"' + clip.text + '"\n\n'
+        clipstring += '(#{no}, '.format(no=count)
         if clip.page['x'] >= 0:
-            metastring += 'Page {pagex}'.format(pagex=clip.page['x'])
+            clipstring += 'Page {pagex}'.format(pagex=clip.page['x'])
             if clip.page['y'] >= 0:
-                metastring += '{sep}{pagey}, '.format(sep='-', pagey=clip.page['y'])
+                clipstring += '{sep}{pagey}, '.format(sep='-', pagey=clip.page['y'])
             else:
-                metastring += ', '
+                clipstring += ', '
         if clip.loc['x'] >= 0:
-            metastring += 'Loc {locx}'.format(locx=clip.loc['x'])
+            clipstring += 'Loc {locx}'.format(locx=clip.loc['x'])
             if clip.loc['y'] >= 0:
-                metastring += '{sep}{locy}, '.format(sep='-', locy=clip.loc['y'])
+                clipstring += '{sep}{locy}, '.format(sep='-', locy=clip.loc['y'])
             else:
-                metastring += ', '
-        metastring += 'Added at {timestamp})'.format(timestamp=clip.ctime)
-        metastring += '\n-----------\n\n'
-        file.write(metastring)
+                clipstring += ', '
+        clipstring += 'Added at {timestamp})'.format(timestamp=clip.ctime)
+        clipstring += '\n-----------\n\n'
+        file.write(clipstring)
 
 jsonString = json.dumps(clipList, indent=3, sort_keys=False)
 
