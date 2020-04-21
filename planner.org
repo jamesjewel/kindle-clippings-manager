@@ -26,6 +26,7 @@
   - [ ] Create directories
 - [ ] Command line arguments
 - [ ] Configuration file
+- [ ] Use kindle format flag --kindle-format
 *** Bugs
 - [X] The extra space at the end of title
 - [ ] Formatting characters at the beginning of title
