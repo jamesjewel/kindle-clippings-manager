@@ -1,4 +1,4 @@
-#!/uwr/bin/env python3
+#!/usr/bin/env python3
 import os
 import re
 # Custom file imports
@@ -13,7 +13,7 @@ class Library:
     newclips = []
 
     def add_clip(self, clip):
-        clips.append(clip)
+        libclips.append(clip)
 
     # Minor functions
     def get_clipcount():
@@ -25,7 +25,7 @@ class Library:
     def add_clips(self, cliplist):
         for clip in cliplist:
             if clip not in libclips:
-                self.ewclips.append(clip)
+                self.newclips.append(clip)
         return
    
     def write_files():
@@ -56,7 +56,13 @@ class Library:
 def get_library(libpath):
     books = os.listdir(libpath)
     libobj = Library()
+    # Creating clip objects from the files
     for book in books:
+       # Deriving author and title
+       p = re.compile(r'([\S ]+) - ([\S ]+).txt')
+       res = p.match(book)
+       author = res.group(1)
+       title = res.group(2)
        file = open(libpath + '/' + book, 'r')
        lines = file.readlines()
        startline = 0
@@ -64,25 +70,31 @@ def get_library(libpath):
        for index, line in enumerate(lines):
            if line.rstrip('\n') == CLIP_END_STRING:
                stopline = index
-               clip = parse_clip(lines[startline:stopline])
+               clip = create_clip(lines[startline:stopline], author, title)
                libobj.add_clip(clip)
                startline = stopline + 2
     return libobj
 
 # parses a file and returns a clipping object
-def parse_clip(cliplines):
+def create_clip(cliplines, author, title):
     text = cliplines[0]
     p = re.compile(r'\(#(\d+),( Page (\d+)-?(\d+)?,)?' \
                    '( Loc (\d+)-?(\d+)?,)?' \
                    ' Added at ([a-zA-Z0-9 :]+)\)')
     res = p.match(cliplines[2])
-    print(res.groups())
-    no = res.groups(0)
-    pagex = res.groups(1)
+    no = res.group(0)
+    locx = res.group(6)
+    locy = res.group(7)
+    ctype = ''
+    pagex = res.group(3)
+    pagey = res.group(4)
+    timestring = res.groups(8)
+    clipobj = clip.Clip(title, author, text, ctype, timestring, [locx, locy], [pagex, pagey])
     return clipobj
 
 
-get_library('./clippings-library')
+lib = get_library('./clippings-library')
+print(lib.libclips)
 # Output clipping format
 #
 # "This is text of the clipping. The highlight text goes here."
