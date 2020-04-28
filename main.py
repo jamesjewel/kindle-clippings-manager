@@ -146,7 +146,7 @@ for clip in clipList:
         # if new book check path exists
         if not os.path.exists(LIBRARYDIR + clip['title']):
             os.mkdir('{libdir}/{subdir}'.format(libdir=LIBRARYDIR, subdir=clip['title']))
-    # iterate through clips add them to clipping file
+    # iterate through clips add them to clipping directory
     with open('{libdir}/{subdir}/{filename}.txt'.format(libdir=LIBRARYDIR, subdir=clip['title'], filename='{} - {}'.format(clip['author'], clip['title'])), 'a+') as file:
         file.write(clip['text'] + '\n\n')
 

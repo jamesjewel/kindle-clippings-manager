@@ -9,25 +9,25 @@ CLIP_END_STRING = '-' * 11
 class Library:
     books = []
     libpath = ''
-    libclips = []
+    clips = []
     newclips = []
 
     def add_clip(self, clip):
-        libclips.append(clip)
+        clips.append(clip)
 
     # Minor functions
     def get_clipcount():
-        return len(libclips)
+        return len(clips)
 
     def add_clip(self, clip):
-        self.libclips.append(clip)
+        self.clips.append(clip)
 
     def add_clips(self, cliplist):
         for clip in cliplist:
-            if clip not in libclips:
+            if clip not in clips:
                 self.newclips.append(clip)
         return
-   
+
     def write_files():
         for clip in cliplist:
             with open('{libdir}/{filename}.txt' \
@@ -51,7 +51,6 @@ class Library:
                 clipstring += 'Added at {timestamp})'.format(timestamp=clip.ctime)
                 clipstring += '\n-----------\n\n'
                 file.write(clipstring)
-
 
 def get_library(libpath):
     books = os.listdir(libpath)
@@ -88,13 +87,15 @@ def create_clip(cliplines, author, title):
     ctype = ''
     pagex = res.group(3)
     pagey = res.group(4)
-    timestring = res.groups(8)
+    timestring = res.group(8)
     clipobj = clip.Clip(title, author, text, ctype, timestring, [locx, locy], [pagex, pagey])
     return clipobj
 
 
 lib = get_library('./clippings-library')
-print(lib.libclips)
+for aclip in lib.clips:
+    print(aclip.__dict__)
+
 # Output clipping format
 #
 # "This is text of the clipping. The highlight text goes here."

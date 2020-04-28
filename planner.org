@@ -31,6 +31,8 @@
 - [X] The extra space at the end of title
 - [ ] Formatting characters at the beginning of title
 - [ ] Fixing unicode issues
+** Phase 2
+- [ ] Add ctype to writing and reeading.
 
 * Rough Patch
 ** 'My Clippings.txt' format:
