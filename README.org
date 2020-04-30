@@ -23,7 +23,5 @@ OPTIONS
 
 #+END_SRC
 
-#+RESULTS:
-
 * Installation
 *Requirements*
