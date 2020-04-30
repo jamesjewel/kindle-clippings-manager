@@ -20,16 +20,11 @@ class Library:
         return len(clips)
 
     def add_clip(self, clip):
-        self.clips.append(clip)
-
-    def add_clips(self, cliplist):
-        for clip in cliplist:
-            if clip not in clips:
-                self.newclips.append(clip)
-        return
+        if clip not in clips():
+            self.clips.append(clip)
 
     def write_files():
-        for clip in cliplist:
+        for clip in clips:
             with open('{libdir}/{filename}.txt' \
                   .format(libdir=LIBRARYDIR, \
                           filename='{} - {}'.format(clip.author, clip.title)) \
