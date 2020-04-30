@@ -2,6 +2,7 @@
 
 import re
 import time
+import os
 import clip
 import library
 
@@ -13,6 +14,7 @@ FILENAME = 'My Clippings.txt'
 CLIPPING_END_STRING = '=' * 10
 
 # See if library exists in path
+lib = ''
 try:
     lib = library.get_library(LIBPATH)
 except FileNotFoundError:
@@ -20,6 +22,7 @@ except FileNotFoundError:
     choice = input('Create new library here? [y/N] ')
     if choice.lower() == 'y':
         os.mkdir(LIBPATH)   # Create library
+        lib = library.get_library(LIBPATH)
         print('Library initialized.')
     else:
         exit(1)
@@ -40,7 +43,7 @@ file.close()
 # Functions for the main program
 # Parses a block of clipping to get information
 def parse_block(cliplines):
-   # line 1: Book info
+    # line 1: Book info
     curline = cliplines[0].lstrip('\ufeff').rstrip('\n')
     p = re.compile(r'([\S ]+) \(([\S ]+)\)')
     res = p.match(curline)
@@ -78,13 +81,13 @@ def parse_block(cliplines):
                                    second=res.group(17), \
                                    year=res.group(14))
     # creating the time object
-    timeobj = time.strptime(timestring)
+#   timeobj = time.strptime(timestring)
 #   if res != None:
 #       print(res.groups())
     # line 3: Highlight
     curline = cliplines[3].strip()
     text = curline
-    clipobj = clip.Clip(title, author, text, ctype, timeobj, loc, page)
+    clipobj = clip.Clip(title, author, text, ctype, timestring, loc, page)
     return clipobj
 
 count = 0
@@ -101,9 +104,22 @@ for index, line in enumerate(lines):
 
 if len(cliplist) == 0:
     print('No clips found in the file. Nothing to do.')
-else:
-    print(cliplist)
-
+# else:
+#   for clip in cliplist:
+#       print(clip.__dict__)
 
 #for aclip in lib.clips:
-#    print(aclip.__dict__)
+#   print(aclip.__dict__)
+
+# Add clips to library
+for clip in cliplist:
+    lib.add_clip(clip)
+
+# Print update status
+print('Found', lib.get_new_clip_count(), 'new clips.')
+# Ask for confirmation
+choice = input('Update library? [Y/n] ')
+# Update library
+if choice.lower() == 'y':
+    lib.write()
+    print('Done.')

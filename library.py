@@ -12,25 +12,25 @@ class Library:
     clips = []
     newclips = []
 
-    def add_clip(self, clip):
-        clips.append(clip)
-
     # Minor functions
-    def get_clipcount():
-        return len(clips)
+    def get_clip_count(self):
+        return len(self.clips)
+
+    def get_new_clip_count(self):
+        return len(self.newclips)
 
     def add_clip(self, clip):
-        if clip not in clips():
-            self.clips.append(clip)
+        if clip not in self.clips:
+            self.newclips.append(clip)
 
-    def write_files():
-        for clip in clips:
+    def write(self):
+        for clip in self.newclips:
             with open('{libdir}/{filename}.txt' \
-                  .format(libdir=LIBRARYDIR, \
+                  .format(libdir=self.libpath, \
                           filename='{} - {}'.format(clip.author, clip.title)) \
                   , 'a') as file:
                 clipstring = '"' + clip.text + '"\n\n'
-                clipstring += '(#{no}, '.format(no=count)
+                clipstring += '(#{no}, '.format(no=1)
                 if clip.page['x'] >= 0:
                     clipstring += 'Page {pagex}'.format(pagex=clip.page['x'])
                     if clip.page['y'] >= 0:
