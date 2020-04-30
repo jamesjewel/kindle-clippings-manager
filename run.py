@@ -17,6 +17,7 @@ CLIPPING_END_STRING = '=' * 10
 lib = ''
 try:
     lib = library.get_library(LIBPATH)
+    print('Library found:', lib.get_clip_count(), 'clips')
 except FileNotFoundError:
     print('Library doesn\'t exist at', os.path.abspath(LIBPATH))
     choice = input('Create new library here? [y/N] ')
@@ -118,10 +119,10 @@ for clip in cliplist:
 # Print update status
 count = lib.get_new_clip_count()
 if count == 0:
-    print('No new clips.')
+    print('No new clips to add.')
     exit(1)
 else:
-    print('Found', lib.get_new_clip_count(), 'new clips.')
+    print('File has', count, 'new clips.')
 # Ask for confirmation
 choice = input('Update library? [Y/n] ')
 # Update library
