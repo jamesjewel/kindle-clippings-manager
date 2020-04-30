@@ -116,7 +116,12 @@ for clip in cliplist:
     lib.add_clip(clip)
 
 # Print update status
-print('Found', lib.get_new_clip_count(), 'new clips.')
+count = lib.get_new_clip_count()
+if count == 0:
+    print('No new clips.')
+    exit(1)
+else:
+    print('Found', lib.get_new_clip_count(), 'new clips.')
 # Ask for confirmation
 choice = input('Update library? [Y/n] ')
 # Update library

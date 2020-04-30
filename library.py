@@ -22,9 +22,10 @@ class Library:
     def add_clip(self, clip):
         flag = False
         for lclip in self.clips:
-            if lclip == clip:
+            if lclip.text == clip.text:
                 flag = True
-        if flag is True:
+                break
+        if flag == False:
             self.newclips.append(clip)
 
 
@@ -34,7 +35,7 @@ class Library:
                   .format(libdir=self.libpath, \
                           filename='{} - {}'.format(clip.author, clip.title)) \
                   , 'a') as file:
-                clipstring = '"' + clip.text + '"\n\n'
+                clipstring = clip.text + '\n\n'
                 clipstring += '(#{no}, '.format(no=1)
                 if clip.page['x'] >= 0:
                     clipstring += 'Page {pagex}'.format(pagex=clip.page['x'])
@@ -72,13 +73,13 @@ def get_library(libpath):
            if line.rstrip('\n') == CLIP_END_STRING:
                stopline = index
                clip = create_clip(lines[startline:stopline], author, title)
-               libobj.add_clip(clip)
+               libobj.clips.append(clip)
                startline = stopline + 2
     return libobj
 
 # parses a file and returns a clipping object
 def create_clip(cliplines, author, title):
-    text = cliplines[0]
+    text = cliplines[0].rstrip('\n')
     p = re.compile(r'\(#(\d+),( Page (\d+)-?(\d+)?,)?' \
                    '( Loc (\d+)-?(\d+)?,)?' \
                    ' Added at ([a-zA-Z0-9 :]+)\)')
