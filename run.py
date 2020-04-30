@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import re
+import time
 import clip
 import library
 
@@ -34,10 +36,6 @@ if len(lines) == 0:
     print('Error: The file', FILEDIR + FILENAME, 'is empty.')
     exit(1)
 file.close()
-
-count = 0
-startline = 0
-stopline = 0
 
 # Functions for the main program
 # Parses a block of clipping to get information
@@ -86,19 +84,25 @@ def parse_block(cliplines):
     # line 3: Highlight
     curline = cliplines[3].strip()
     text = curline
-    clipobj = Clip(title, author, text, ctype, timeobj, loc, page)
+    clipobj = clip.Clip(title, author, text, ctype, timeobj, loc, page)
     return clipobj
+
+count = 0
+startline = 0
+stopline = 0
 
 cliplist = []
 for index, line in enumerate(lines):
     if line.rstrip() == CLIPPING_END_STRING:
         count = count + 1
         stopline = index
-        cliplist.append(parse_block(startline, stopline).getClip())
+        cliplist.append(parse_block(lines[startline:stopline]))
         startline = stopline + 1
 
 if len(cliplist) == 0:
     print('No clips found in the file. Nothing to do.')
+else:
+    print(cliplist)
 
 
 #for aclip in lib.clips:
