@@ -55,6 +55,7 @@ class Library:
 def get_library(libpath):
     books = os.listdir(libpath)
     libobj = Library()
+    libobj.libpath = os.path.abspath(libpath)
     # Creating clip objects from the files
     for book in books:
        # Deriving author and title
@@ -91,10 +92,6 @@ def create_clip(cliplines, author, title):
     clipobj = clip.Clip(title, author, text, ctype, timestring, [locx, locy], [pagex, pagey])
     return clipobj
 
-
-lib = get_library('./clippings-library')
-for aclip in lib.clips:
-    print(aclip.__dict__)
 
 # Output clipping format
 #
