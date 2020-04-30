@@ -37,16 +37,16 @@ file.close()
 
 curLine = 0
 count = 0
-startLine = 0
-stopLine = 0
+startline = 0
+stopline = 0
 
 cliplist = []
 for index, line in enumerate(lines):
     if line.rstrip() == CLIPPING_END_STRING:
         count = count + 1
-        stopLine = index
-        cliplist.append(parseBlock(startLine, stopLine).getClip())
-        startLine = stopLine + 1
+        stopline = index
+        cliplist.append(parseBlock(startline, stopline).getClip())
+        startline = stopline + 1
 
 if len(cliplist) == 0:
     print('No clips found in the file. Nothing to do.')
