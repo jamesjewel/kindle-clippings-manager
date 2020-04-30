@@ -20,8 +20,13 @@ class Library:
         return len(self.newclips)
 
     def add_clip(self, clip):
-        if clip not in self.clips:
+        flag = False
+        for lclip in self.clips:
+            if lclip == clip:
+                flag = True
+        if flag is True:
             self.newclips.append(clip)
+
 
     def write(self):
         for clip in self.newclips:
