@@ -61,8 +61,9 @@ def get_library(libpath):
        # Deriving author and title
        p = re.compile(r'([\S ]+) - ([\S ]+).txt')
        res = p.match(book)
-       author = res.group(1)
-       title = res.group(2)
+       if res is not None:
+           author = res.group(1)
+           title = res.group(2)
        file = open(libpath + '/' + book, 'r')
        lines = file.readlines()
        startline = 0
