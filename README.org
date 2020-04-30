@@ -1,10 +1,12 @@
 #+TITLE:clipman
 #+DESCRIPTION: The project README
 
+*NOTE*: This program is currently under heavy development.
+
 =clipman= is a command-line tool to organize your Kindle notes and highlights ('My
 Clippings.txt') into folders and separate files based on their book titles.
 
-* UsagE
+* Usage
 #+BEGIN_SRC sh
 clipman "/path/to/My Clippings.txt"
 
