@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# TODO Import selectively?
 import re
 import time
 import os
@@ -54,29 +55,35 @@ def parse_block(cliplines):
     # line 2: Metadata
     curline = cliplines[1].strip()
     # TODO Name the regular expression
-    p = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) " \
-                    "(\d+)(-?(\d+))?( \| location (\d+)(-?(\d+))?)? \| " \
-                    "Added on ([a-zA-Z]{3})[a-zA-Z]{,3}day, (\d{1,2}) " \
-                    "([a-zA-Z]{3})[a-zA-Z]+ (\d{4}) (\d\d):(\d\d):(\d\d)")
+    p = re.compile(r"- Your (?P<type>Highlight|Note|Bookmark) " \
+                    "(on|at) (?P<postype>location|page) " \
+                    "(?P<posx>\d+)(-?(?P<posy>\d+))?" \
+                    "( \| location (?P<locx>\d+)(-?(?P<locy>\d+))?)? \| " \
+                    # Gettin the timestamp
+                    "Added on (?P<wday>[a-zA-Z]{3})[a-zA-Z]{,3}day, " \
+                    "(?P<day>\d{1,2}) (?P<month>[a-zA-Z]{3})[a-zA-Z]+ " \
+                    "(?P<year>\d{4}) (?P<hr>\d\d):(?P<min>\d\d):(?P<sec>\d\d)")
     res = p.match(curline)
     # getting clipping type
-    ctype = res.group(1).lower()
+    ctype = res.group('type').lower()
     # getting position data
     # TODO: A possible alternative to 'None'
-    if res.group(3) == 'location':
-        loc = [res.group(4), res.group(6)]
+    if res.group('postype') == 'location':
+        loc = [res.group('posx'), res.group('posy')]
         page = [None, None]
-    elif res.group(3) == 'page':
-        page = [res.group(4), res.group(6)]
-        loc = [res.group(8), res.group(10)]
+    elif res.group('postype') == 'page':
+        page = [res.group('posx'), res.group('posy')]
+        loc = [res.group('locx'), res.group('locy')]
     # extracting timestamp
     # strptime('Fri Mar 01 23:38:40 2019')
     timestring = '{weekday} {month} {day} {hour}:{minute}:{second} {year}'
-    timestring = timestring.format(weekday=res.group(11), month=res.group(13), \
-                                   day=res.group(12), \
-                                   hour=res.group(15), minute=res.group(16), \
-                                   second=res.group(17), \
-                                   year=res.group(14))
+    timestring = timestring.format(weekday=res.group('wday'), \
+                                   month=res.group('month'), \
+                                   day=res.group('day'), \
+                                   hour=res.group('hr'), \
+                                   minute=res.group('min'), \
+                                   second=res.group('sec'), \
+                                   year=res.group('year'))
     # creating the time object
 #   timeobj = time.strptime(timestring)
 #   if res != None:
