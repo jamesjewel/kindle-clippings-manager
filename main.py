@@ -53,6 +53,7 @@ def parse_block(cliplines):
 
     # line 2: Metadata
     curline = cliplines[1].strip()
+    # TODO Name the regular expression
     p = re.compile(r"- Your (Highlight|Note|Bookmark) (on|at) (location|page) " \
                     "(\d+)(-?(\d+))?( \| location (\d+)(-?(\d+))?)? \| " \
                     "Added on ([a-zA-Z]{3})[a-zA-Z]{,3}day, (\d{1,2}) " \
@@ -61,19 +62,13 @@ def parse_block(cliplines):
     # getting clipping type
     ctype = res.group(1).lower()
     # getting position data
-    # TODO: Fix this complicated logic
-    temp = []
-    for i in [4, 6, 8, 10]:
-        if res.group(i) is not None:
-            temp.append(int(res.group(i)))
-        else:
-            temp.append(-1)
+    # TODO: A possible alternative to 'None'
     if res.group(3) == 'location':
-        loc = [temp[0], temp[1]]
-        page = [-1, -1]
+        loc = [res.group(4), res.group(6)]
+        page = [None, None]
     elif res.group(3) == 'page':
-        page = [temp[0], temp[1]]
-        loc = [temp[2], temp[3]]
+        page = [res.group(4), res.group(6)]
+        loc = [res.group(8), res.group(10)]
     # extracting timestamp
     # strptime('Fri Mar 01 23:38:40 2019')
     timestring = '{weekday} {month} {day} {hour}:{minute}:{second} {year}'
@@ -90,7 +85,6 @@ def parse_block(cliplines):
     curline = cliplines[3].strip()
     text = curline
     clipobj = clip.Clip(title, author, text, ctype, timestring, loc, page)
-    print(clipobj.__dict__)
     return clipobj
 
 count = 0

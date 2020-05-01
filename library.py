@@ -21,13 +21,13 @@ class Library:
 
     def add_clip(self, clip):
         flag = False
+        # TODO See if this can be implemented in a better way
         for lclip in self.clips:
-            if lclip.text == clip.text:
+            if lclip == clip:
                 flag = True
                 break
         if flag == False:
             self.newclips.append(clip)
-
 
     def write(self):
         for clip in self.newclips:
@@ -38,15 +38,15 @@ class Library:
                 clipstring = clip.text + '\n\n'
                 clipstring += '(#{no}, '.format(no=1)
                 clipstring += '{ctype}, '.format(ctype=clip.ctype.capitalize())
-                if clip.page['x'] >= 0:
+                if clip.page['x'] is not None:
                     clipstring += 'Page {pagex}'.format(pagex=clip.page['x'])
-                    if clip.page['y'] >= 0:
+                    if clip.page['y'] is not None:
                         clipstring += '{sep}{pagey}, '.format(sep='-', pagey=clip.page['y'])
                     else:
                         clipstring += ', '
-                if clip.loc['x'] >= 0:
+                if clip.loc['x'] is not None:
                     clipstring += 'Loc {locx}'.format(locx=clip.loc['x'])
-                    if clip.loc['y'] >= 0:
+                    if clip.loc['y'] is not None:
                         clipstring += '{sep}{locy}, '.format(sep='-', locy=clip.loc['y'])
                     else:
                         clipstring += ', '
