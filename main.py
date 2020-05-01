@@ -47,7 +47,7 @@ file.close()
 def parse_block(cliplines):
     # line 1: Book info
     curline = cliplines[0].lstrip('\ufeff').rstrip('\n')
-    p = re.compile(r'(?P<title>[\S ]+) \(?P<author>([\S ]+)\)')
+    p = re.compile(r'(?P<title>[\S ]+) \((?P<author>[\S ]+)\)')
     res = p.match(curline)
     title = res.group('title')
     author = res.group('author')
@@ -55,17 +55,17 @@ def parse_block(cliplines):
     # line 2: Metadata
     curline = cliplines[1].strip()
     # TEST Name the regular expression
-    p = re.compile(r"- Your (?P<type>Highlight|Note|Bookmark) " \
+    p = re.compile(r"- Your (?P<ctype>Highlight|Note|Bookmark) " \
                     "(on|at) (?P<postype>location|page) " \
                     "(?P<posx>\d+)(-?(?P<posy>\d+))?" \
                     "( \| location (?P<locx>\d+)(-?(?P<locy>\d+))?)? \| " \
                     # Getting the timestamp
                     "Added on (?P<wday>[a-zA-Z]{3})[a-zA-Z]{,3}day, " \
-                    "(?P<day>\d{1,2}) (?P<month>[a-zA-Z]{3})[a-zA-Z]+ " \
+                    "(?P<day>\d{1,2}) (?P<month>[a-zA-Z]{3})[a-zA-Z]* " \
                     "(?P<year>\d{4}) (?P<hr>\d\d):(?P<min>\d\d):(?P<sec>\d\d)")
     res = p.match(curline)
     # getting clipping type
-    ctype = res.group('type').lower()
+    ctype = res.group('ctype').lower()
     # getting position data
     # TODO: A possible alternative to 'None'
     if res.group('postype') == 'location':
