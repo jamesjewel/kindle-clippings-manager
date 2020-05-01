@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 class Clip:
-    def __init__(self, _title, _author, _text, _type, _time, _loc=[-1, -1], _page=[-1, -1]):
+    def __init__(self, _title, _author, _text, _type, _time, _loc=[None, None], _page=[None, None]):
         self.title = _title
         self.author = _author
         self.text = _text
