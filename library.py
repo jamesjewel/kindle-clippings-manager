@@ -61,11 +61,11 @@ def get_library(libpath):
     # Creating clip objects from the files
     for book in books:
        # Deriving author and title
-       p = re.compile(r'([\S ]+) - ([\S ]+).txt')
+       p = re.compile(r'(?P<title>[\S ]+) - (?P<author>[\S ]+).txt')
        res = p.match(book)
        if res is not None:
-           author = res.group(1)
-           title = res.group(2)
+           author = res.group('title')
+           title = res.group('author')
        file = open(libpath + '/' + book, 'r')
        lines = file.readlines()
        startline = 0
