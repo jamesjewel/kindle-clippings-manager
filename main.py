@@ -61,6 +61,7 @@ def parse_block(cliplines):
     # getting clipping type
     ctype = res.group(1).lower()
     # getting position data
+    # TODO: Fix this complicated logic
     temp = []
     for i in [4, 6, 8, 10]:
         if res.group(i) is not None:
@@ -89,6 +90,7 @@ def parse_block(cliplines):
     curline = cliplines[3].strip()
     text = curline
     clipobj = clip.Clip(title, author, text, ctype, timestring, loc, page)
+    print(clipobj.__dict__)
     return clipobj
 
 count = 0
@@ -105,12 +107,6 @@ for index, line in enumerate(lines):
 
 if len(cliplist) == 0:
     print('No clips found in the file. Nothing to do.')
-# else:
-#   for clip in cliplist:
-#       print(clip.__dict__)
-
-#for aclip in lib.clips:
-#   print(aclip.__dict__)
 
 # Add clips to library
 for clip in cliplist:

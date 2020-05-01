@@ -37,6 +37,7 @@ class Library:
                   , 'a') as file:
                 clipstring = clip.text + '\n\n'
                 clipstring += '(#{no}, '.format(no=1)
+                clipstring += '{ctype}, '.format(ctype=clip.ctype.capitalize())
                 if clip.page['x'] >= 0:
                     clipstring += 'Page {pagex}'.format(pagex=clip.page['x'])
                     if clip.page['y'] >= 0:
@@ -50,7 +51,7 @@ class Library:
                     else:
                         clipstring += ', '
                 clipstring += 'Added at {timestamp})'.format(timestamp=clip.ctime)
-                clipstring += '\n-----------\n\n'
+                clipstring += '\n-----------\n\n' # TODO Use multiplication notation
                 file.write(clipstring)
 
 def get_library(libpath):
@@ -80,17 +81,18 @@ def get_library(libpath):
 # parses a file and returns a clipping object
 def create_clip(cliplines, author, title):
     text = cliplines[0].rstrip('\n')
-    p = re.compile(r'\(#(\d+),( Page (\d+)-?(\d+)?,)?' \
-                   '( Loc (\d+)-?(\d+)?,)?' \
-                   ' Added at ([a-zA-Z0-9 :]+)\)')
+    p = re.compile(r'\(#(?P<no>\d+), (?P<type>[a-zA-Z]+),' \
+                   '( Page (?P<pagex>\d+)-?(?P<pagey>\d+)?,)?' \
+                   '( Loc (?P<locx>\d+)-?(?P<locy>\d+)?,)?' \
+                   ' Added at (?P<tstamp>[a-zA-Z0-9 :]+)\)')
     res = p.match(cliplines[2])
-    no = res.group(0)
-    locx = res.group(6)
-    locy = res.group(7)
-    ctype = ''
-    pagex = res.group(3)
-    pagey = res.group(4)
-    timestring = res.group(8)
+    no = res.group('no')
+    ctype = res.group('type').lower()
+    locx = res.group('locx')
+    locy = res.group('locy')
+    pagex = res.group('pagex')
+    pagey = res.group('pagey')
+    timestring = res.group('tstamp')
     clipobj = clip.Clip(title, author, text, ctype, timestring, [locx, locy], [pagex, pagey])
     return clipobj
 
