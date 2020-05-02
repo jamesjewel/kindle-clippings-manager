@@ -36,6 +36,7 @@ class Library:
                           filename='{} - {}'.format(clip.author, clip.title)) \
                   , 'a') as file:
                 clipstring = clip.text + '\n\n'
+                # TODO Add clipping number
                 clipstring += '(#{no}, '.format(no=1)
                 clipstring += '{ctype}, '.format(ctype=clip.ctype.capitalize())
                 if clip.page['x'] is not None:

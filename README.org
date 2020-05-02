@@ -27,3 +27,6 @@ OPTIONS
 
 * Installation
 *Requirements*
+
+* Notes
+This program uses simple regular expression based matching to parse the data. It is assumed that books have proper metadata.
