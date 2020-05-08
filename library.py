@@ -17,7 +17,7 @@ class Library:
 
     # Minor functions
     def get_clip_count(self):
-        return lenelf.clips)
+        return len(self.clips)
 
     def get_new_clip_count(self):
         return len(self.newclips)
@@ -34,9 +34,9 @@ class Library:
 
     def write(self):
         for clip in self.newclips:
-            filepath = '{libdir}/{filename}.txt' \ 
-                        .format(libdir=self.libpath, \
-                        filename='{} - {}'.format(clip.author, clip.title)
+            filepath = '{libdir}/{filename}.txt' \
+                       .format(libdir=self.libpath, \
+                       filename='{} - {}'.format(clip.author, clip.title))
             if not os.path.exists(filepath):
                 with open(filepath, 'w') as file:
                     count = 0
@@ -44,22 +44,22 @@ class Library:
                     clipstring = '---\n' \
                                  'Title: {title}\n' \
                                  'Author: {author}\n' \
-                                 '---\n\n'
-                                 .format(title=clip.title, author=clip.author)
+                                 '---\n\n' \
+                                .format(title=clip.title, author=clip.author)
                     file.write(clipstring)
             # Read details: time and clip count from files that exists
             else:
                 with open(filepath, 'r') as file:
                     lines = file.readlines()
-                    lastline = lines[len(lines)]
+                    lastline = lines[len(lines) - 3]
                     result = CLIP_META_REGEX.match(lastline)
-                    count = result.group('no') 
+                    count = int(result.group('no')) 
                     
-                                
+            count = str(count + 1) 
             with open(filepath, 'a') as file:
                 clipstring = clip.text + '\n\n'
                 # TODO Add clipping number
-                clipstring += '(#{no}, '.format(no=count + 1)
+                clipstring += '(#{no}, '.format(no=count)
                 clipstring += '{ctype}, '.format(ctype=clip.ctype.capitalize())
                 if clip.page['x'] is not None:
                     clipstring += 'Page {pagex}'.format(pagex=clip.page['x'])
