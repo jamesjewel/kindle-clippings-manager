@@ -5,7 +5,10 @@ import re
 import clip
 
 CLIP_END_STRING = '-' * 11
-
+CLIP_META_REGEX = re.compile(r'\(#(?P<no>\d+), (?P<type>[a-zA-Z]+),' \
+                   '( Page (?P<pagex>\d+)-?(?P<pagey>\d+)?,)?' \
+                   '( Loc (?P<locx>\d+)-?(?P<locy>\d+)?,)?' \
+                   ' Added at (?P<tstamp>[a-zA-Z0-9 :]+)\)')
 class Library:
     books = []
     libpath = ''
@@ -14,7 +17,7 @@ class Library:
 
     # Minor functions
     def get_clip_count(self):
-        return len(self.clips)
+        return lenelf.clips)
 
     def get_new_clip_count(self):
         return len(self.newclips)
@@ -31,13 +34,32 @@ class Library:
 
     def write(self):
         for clip in self.newclips:
-            with open('{libdir}/{filename}.txt' \
-                  .format(libdir=self.libpath, \
-                          filename='{} - {}'.format(clip.author, clip.title)) \
-                  , 'a') as file:
+            filepath = '{libdir}/{filename}.txt' \ 
+                        .format(libdir=self.libpath, \
+                        filename='{} - {}'.format(clip.author, clip.title)
+            if not os.path.exists(filepath):
+                with open(filepath, 'w') as file:
+                    count = 0
+                    # Add front-matter
+                    clipstring = '---\n' \
+                                 'Title: {title}\n' \
+                                 'Author: {author}\n' \
+                                 '---\n\n'
+                                 .format(title=clip.title, author=clip.author)
+                    file.write(clipstring)
+            # Read details: time and clip count from files that exists
+            else:
+                with open(filepath, 'r') as file:
+                    lines = file.readlines()
+                    lastline = lines[len(lines)]
+                    result = CLIP_META_REGEX.match(lastline)
+                    count = result.group('no') 
+                    
+                                
+            with open(filepath, 'a') as file:
                 clipstring = clip.text + '\n\n'
                 # TODO Add clipping number
-                clipstring += '(#{no}, '.format(no=1)
+                clipstring += '(#{no}, '.format(no=count + 1)
                 clipstring += '{ctype}, '.format(ctype=clip.ctype.capitalize())
                 if clip.page['x'] is not None:
                     clipstring += 'Page {pagex}'.format(pagex=clip.page['x'])
@@ -82,10 +104,7 @@ def get_library(libpath):
 # parses a file and returns a clipping object
 def create_clip(cliplines, author, title):
     text = cliplines[0].rstrip('\n')
-    p = re.compile(r'\(#(?P<no>\d+), (?P<type>[a-zA-Z]+),' \
-                   '( Page (?P<pagex>\d+)-?(?P<pagey>\d+)?,)?' \
-                   '( Loc (?P<locx>\d+)-?(?P<locy>\d+)?,)?' \
-                   ' Added at (?P<tstamp>[a-zA-Z0-9 :]+)\)')
+    p = CLIP_META_REGEX
     res = p.match(cliplines[2])
     no = res.group('no')
     ctype = res.group('type').lower()
@@ -98,7 +117,10 @@ def create_clip(cliplines, author, title):
     return clipobj
 
 
-# Output clipping format
+# ---
+# Title: Thinking, Fast and Slow
+# Author: Daniel Kahneman
+# ---
 #
 # "This is text of the clipping. The highlight text goes here."
 #
