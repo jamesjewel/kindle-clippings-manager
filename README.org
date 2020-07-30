@@ -1,5 +1,4 @@
-#+TITLE:clipman
-#+DESCRIPTION: The project README
+#+title: clipman
 
 *NOTE*: This program is currently under heavy development.
 
@@ -26,7 +25,11 @@ OPTIONS
 #+END_SRC
 
 * Installation
-*Requirements*
+#+begin_src sh
+$ git clone 
+$ cd clipman/
+$ ./clipman.py
+#+end_src
 
 * Notes
 This program uses simple regular expression based matching to parse the data. It is assumed that books have proper metadata.
